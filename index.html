@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Enigma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter&family=Montserrat:wght@300&family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    
+</head>
+<body>
+    <div class="contenedor">
+
+        <div class="logo">
+            <img src="./img/LogologoAlura.png" alt="logo-alura">
+        </div>  
+        
+        <div class="principal">
+                <div >
+                    <textarea class="mensaje-in" name="mensajero" id="mensajero" cols="30" rows="7" placeholder="Ingrese el texto aquí"></textarea>
+                </div>
+                <p class="warning">!! Solo letras minusculas y sin acentos</p>
+                <div class="botones">
+                    
+                    <button class="boton boton-encriptar" onclick="encriptar(0)">Encriptar!</button>
+                    <button class="boton boton-desencriptar"onclick="encriptar(1)">Desencriptar!</button>
+                </div>
+        </div>
+        <div class="salida" id="desaparecer">
+            <div class="imagen">
+                <img src="./img/Muneco.png" alt="imagen-derecha">
+            </div>
+            <div class="mensaje1">
+                <p >Ningun mensaje fue encontrado</p>
+            </div>
+            <div class="mensaje2">
+                <p>Ingresa el texto que desees encriptar o desencriptar</p>
+            </div>
+            
+        </div>
+        <div class="salida" id="aparecer">
+            <div class="out">
+                <textarea class="mensaje-out" name="resultado" id="resultado" cols="30" rows="18" placeholder="Nada que encriptar/desencriptar"></textarea>
+            </div>
+                        
+            <div class="copiando">
+                <button class="boton boton-copiar" onclick="copiarAlPortapapeles('resultado')">Copiar!</button>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Realizado por Nelson Javier Salguero Ochoa 09/01/2023</p>
+    </footer>
+</body>
+
+<script>
+    document.getElementById("aparecer").style.display = "none";
+    document.getElementById("desaparecer").style.display = "run-in";        
+    const vocales=["e","i","a","o","u"];
+    const silabas=["enter","imes","ai","ober","ufat"];
+    var c=0;
+    function encriptar(c){
+        document.getElementById("desaparecer").style.display = "none";//ocultamos imagen
+        document.getElementById("aparecer").style.display = "block";//mostramos caja texto encriptado y boton
+        mensaje = document.getElementById("mensajero").value; //capturamos el contenido de la caja de texto
+        encriptado=mensaje.toLowerCase();//por si acaso, pasamos a minusculas
+        encriptado=encriptado.normalize("NFD").replace(/[\u0300-\u036f]/g, "");//elimina tildes
+        if (c==0){ // encriptar si =0 . Cualquier otro valor desencripta
+            for (i=0;i<vocales.length;i++){
+                encriptado=encriptado.replaceAll(vocales[i],silabas[i]);//encripta
+            }
+        }
+        else{
+            for (i=0;i<silabas.length;i++){
+                encriptado=encriptado.replaceAll(silabas[i],vocales[i]);//desencripta
+            }
+        }    
+        console.log("encriptado: ",encriptado);//solo para verificar en la consola
+        document.getElementById('resultado').innerHTML = encriptado;//para llevar el valor a mostrarse
+        document.getElementById("mensajero").value = ""; //borra el contenido de la entrada a encriptar
+    } 
+
+    function copiarAlPortapapeles(id_elemento) {
+        var aux = document.createElement("input");
+        aux.setAttribute("value", document.getElementById(id_elemento).innerHTML);
+        document.body.appendChild(aux);
+        aux.select();
+        document.execCommand("copy");
+        document.body.removeChild(aux);
+    }
+        
+</script>
+</html>
